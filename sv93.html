@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track your experience</title>
+
+      <!-- Add the script for passing URL parameters to the embedded iframe -->
+    <script>
+        // Function to get URL parameter value by name
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Function to create iframe with URL parameters from main webpage URL
+        function createIframeWithParams() {
+            var mainUrl = "https://tally.so/r/n061Vj"; // Base URL for the iframe
+            var sParamValue = getUrlParameter('s'); // Get value of parameter "s" from main webpage URL
+
+            // Add parameter to URL if it exists
+            if (sParamValue) {
+                mainUrl += "?s=" + encodeURIComponent(sParamValue);
+            }
+
+            // Create iframe element
+            var iframe = document.createElement('iframe');
+            iframe.setAttribute('src', mainUrl);
+            iframe.setAttribute('width', '100%');
+            iframe.setAttribute('height', '1666');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('marginheight', '0');
+            iframe.setAttribute('marginwidth', '0');
+            iframe.setAttribute('title', 'Experience survey');
+
+            // Append iframe to container
+            document.body.appendChild(iframe);
+        }
+
+        // Call function to create iframe with URL parameters from main webpage URL
+        createIframeWithParams();
+    </script>
+  
+</head>
+<body>
+
+<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="A_test_0"></a>Welcome!</h1>
+<h2 class="code-line" data-line-start=1 data-line-end=2 ><a id="_Subtitle__1"></a><em>If you want to take a survey, you're in the right place</em></h2>
+    
+</body>
+</html>
