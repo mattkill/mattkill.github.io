@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Track your experience</title>
 
-      <!-- Add the script for passing URL parameters to the embedded iframe -->
+    <!-- Add the script for passing URL parameters to the embedded iframe -->
     <script>
         // Function to get URL parameter value by name
         function getUrlParameter(name) {
@@ -41,10 +41,14 @@
             document.body.appendChild(iframe);
         }
 
-        // Call function to create iframe with URL parameters from main webpage URL
-        createIframeWithParams();
+        // Function to execute after DOM is fully loaded
+        function executeAfterDOMLoaded() {
+            createIframeWithParams();
+        }
+
+        // Add event listener to execute the function after DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", executeAfterDOMLoaded);
     </script>
-  
 </head>
 <body>
 
