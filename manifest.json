@@ -2,8 +2,8 @@
     "$schema": "https://json.schemastore.org/web-manifest-combined.json",
     "display": "standalone",
     "start_url": "/",
-    "name": "Experience_Sampling",
-    "short_name": "ESM",
+    "name": "Wellbeing Lab",
+    "short_name": "WB Lab",
     "icons": [
         {
             "src": "/icon-192x192.png",
