@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slider Survey</title>
+    <title>Interactive Slider Survey</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,8 @@
 
         .survey-container {
             width: 90%;
-            max-width: 400px; /* Adjust this value for a reasonable maximum width on larger screens */
+            max-width: 400px; /* Reasonable maximum width on larger screens */
+            font-size: 18px; /* Increased font size for better readability on mobile */
         }
 
         .slider-question {
@@ -44,16 +45,26 @@
             transition: opacity .2s;
         }
 
-        input[type="range"]::-webkit-slider-thumb {
+        input[type="range"]:not(.activated)::-webkit-slider-thumb {
+            visibility: hidden; /* Initially hide the slider thumb */
+        }
+
+        input[type="range"]:not(.activated)::-moz-range-thumb {
+            visibility: hidden; /* Initially hide the slider thumb */
+        }
+
+        input[type="range"].activated::-webkit-slider-thumb {
             -webkit-appearance: none; /* Override default CSS styles */
             appearance: none;
+            visibility: visible; /* Show the slider thumb on interaction */
             width: 25px;
             height: 25px;
             background: #4CAF50;
             cursor: pointer;
         }
 
-        input[type="range"]::-moz-range-thumb {
+        input[type="range"].activated::-moz-range-thumb {
+            visibility: visible; /* Show the slider thumb on interaction */
             width: 25px;
             height: 25px;
             background: #4CAF50;
@@ -63,13 +74,12 @@
         .label-container {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px; /* Increased margin to prevent overlap */
+            margin-top: 20px;
         }
 
         .label-container > span {
-            font-size: 14px;
+            font-size: 16px; /* Slightly larger font for the labels */
         }
-
     </style>
 </head>
 <body>
@@ -91,10 +101,21 @@
 </div>
 
 <script>
+    const slider = document.getElementById('feeling');
+    slider.addEventListener('input', function() {
+        this.classList.add('activated'); // Add 'activated' class on user interaction
+    });
+
     document.getElementById('surveyForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
+
+        if (!slider.classList.contains('activated')) {
+            alert('Please interact with the slider before submitting.');
+            return; // Stop the form submission
+        }
+
+        // Assuming here you'd process and send the form data
         alert('Thank you for your submission!');
-        // Here you can add code to process and send the form data as needed
     });
 </script>
 
