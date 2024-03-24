@@ -47,8 +47,10 @@
         margin-top: 5px;
         font-size: 14px;
         position: absolute;
-        width: calc(100% + 20px); /* Adjusted width to include the slider's padding */
-        left: -10px; /* Adjusted position to align with the slider's edges */
+        width: 100%;
+        left: 0;
+        padding: 0 10px; /* Adjusted padding to match slider's padding */
+        box-sizing: border-box; /* Ensure padding is included in the width calculation */
     }
 
     .slider-labels span {
