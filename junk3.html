@@ -18,8 +18,8 @@
 
         .survey-container {
             width: 90%;
-            max-width: 400px; /* Reasonable maximum width on larger screens */
-            font-size: 18px; /* Increased font size for better readability on mobile */
+            max-width: 400px;
+            font-size: 18px;
         }
 
         .slider-question {
@@ -35,14 +35,25 @@
 
         input[type="range"] {
             width: 100%;
-            -webkit-appearance: none; /* Override default CSS styles */
+            -webkit-appearance: none;
             appearance: none;
             height: 5px;
             background: #ddd;
             outline: none;
             opacity: 0.7;
-            -webkit-transition: opacity .2s;
             transition: opacity .2s;
+        }
+
+        input[type="range"]:focus {
+            outline: none; /* Removes the outline on focus to prevent a visual "flash" */
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            -webkit-appearance: none; /* Override any default appearance that might cause a flash */
+        }
+
+        input[type="range"]::-moz-range-track {
+            -moz-appearance: none; /* Override any default appearance that might cause a flash */
         }
 
         input[type="range"]:not(.activated)::-webkit-slider-thumb {
@@ -54,8 +65,7 @@
         }
 
         input[type="range"].activated::-webkit-slider-thumb {
-            -webkit-appearance: none; /* Override default CSS styles */
-            appearance: none;
+            -webkit-appearance: none;
             visibility: visible; /* Show the slider thumb on interaction */
             width: 10px; /* Thickness of the vertical line */
             height: 25px; /* Height of the thumb */
@@ -78,7 +88,7 @@
         }
 
         .label-container > span {
-            font-size: 16px; /* Slightly larger font for the labels */
+            font-size: 16px;
         }
     </style>
 </head>
@@ -89,7 +99,7 @@
         <div class="slider-question">
             <label for="feeling">How are you feeling right now?</label>
             <div class="slider-container">
-                <input type="range" id="feeling" name="feeling" min="-50" max="50" step="0.1" value="0">
+                <input type="range" id="feeling" name="feeling" class="slider" min="-50" max="50" step="0.1" value="0">
                 <div class="label-container">
                     <span>Very bad</span>
                     <span>Very good</span>
@@ -102,8 +112,12 @@
 
 <script>
     const slider = document.getElementById('feeling');
-    slider.addEventListener('input', function() {
-        this.classList.add('activated'); // Add 'activated' class on user interaction
+    slider.addEventListener('mousedown', function() {
+        this.classList.add('activated'); // Show the slider thumb on interaction
+    });
+
+    slider.addEventListener('touchstart', function() {
+        this.classList.add('activated'); // Also account for touch devices
     });
 
     document.getElementById('surveyForm').addEventListener('submit', function(event) {
@@ -114,7 +128,6 @@
             return; // Stop the form submission
         }
 
-        // Assuming here you'd process and send the form data
         alert('Thank you for your submission!');
     });
 </script>
