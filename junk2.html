@@ -30,25 +30,22 @@
         margin-bottom: 5px;
     }
 
-    .question input[type="text"],
-    .question select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
     .slider-container {
-        width: 90%; /* Adjust the width as needed */
-        max-width: 400px; /* Maximum pixel width */
+        width: 90%;
+        max-width: 400px;
         margin: 0 auto;
         position: relative;
+    }
+
+    .slider {
+        width: 100%;
     }
 
     .slider-labels {
         display: flex;
         justify-content: space-between;
-        margin-top: 10px;
+        margin-top: 5px;
+        font-size: 14px;
     }
 
     .slider-labels span {
@@ -75,7 +72,7 @@
         <div class="question">
             <label for="feeling">How are you feeling right now?</label>
             <div class="slider-container">
-                <input type="range" id="feeling" name="feeling" min="1" max="100" value="50">
+                <input type="range" id="feeling" name="feeling" min="1" max="100" value="50" class="slider">
                 <div class="slider-labels">
                     <span>Very bad</span>
                     <span>Very good</span>
