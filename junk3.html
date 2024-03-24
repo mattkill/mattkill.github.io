@@ -3,102 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Survey</title>
+    <title>Slider Survey</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
         }
 
         .survey-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px; /* Adjust this value for a reasonable maximum width on larger screens */
         }
 
-        input[type=text], input[type=radio], input[type=checkbox], input[type=range] {
-            margin-bottom: 15px;
+        .slider-question {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
         }
 
-        input[type=radio], input[type=checkbox] {
-            margin-right: 5px;
+        .slider-container {
+            position: relative;
+            margin: 20px 0;
         }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none; /* Override default CSS styles */
+            appearance: none;
+            height: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Override default CSS styles */
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
             cursor: pointer;
         }
 
-        button:hover {
-            opacity: 0.8;
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            cursor: pointer;
         }
 
         .label-container {
             display: flex;
             justify-content: space-between;
+            margin-top: -12px; /* Adjust this value as needed to better align labels with the slider */
         }
 
-        fieldset {
-            border: none;
-            margin: 20px 0;
+        .label-container > span {
+            font-size: 14px;
         }
 
-        .rating-question {
-            display: flex;
-            justify-content: space-between;
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 
 <div class="survey-container">
     <form id="surveyForm">
-        <h1>Survey</h1>
-
-        <!-- Slider Question -->
-        <label for="feeling">How are you feeling right now?</label>
-        <input type="range" id="feeling" name="feeling" min="0" max="10" step="1">
-        <div class="label-container">
-            <span>Very bad</span> <span>Very good</span>
+        <div class="slider-question">
+            <label for="feeling">How are you feeling right now?</label>
+            <div class="slider-container">
+                <input type="range" id="feeling" name="feeling" min="0" max="10" step="1">
+                <div class="label-container">
+                    <span>Very bad</span>
+                    <span>Very good</span>
+                </div>
+            </div>
         </div>
-
-        <!-- Multiple Choice Rating Question -->
-        <label>How happy are you right now?</label>
-        <div class="rating-question">
-            <input type="radio" id="happy1" name="happiness" value="1" required>
-            <label for="happy1">1</label>
-            <input type="radio" id="happy2" name="happiness" value="2" required>
-            <label for="happy2">2</label>
-            <input type="radio" id="happy3" name="happiness" value="3" required>
-            <label for="happy3">3</label>
-            <input type="radio" id="happy4" name="happiness" value="4" required>
-            <label for="happy4">4</label>
-            <input type="radio" id="happy5" name="happiness" value="5" required>
-            <label for="happy5">5</label>
-            <input type="radio" id="happy6" name="happiness" value="6" required>
-            <label for="happy6">6</label>
-            <input type="radio" id="happy7" name="happiness" value="7" required>
-            <label for="happy7">7</label>
-        </div>
-
-        <!-- Checkbox Question -->
-        <fieldset>
-            <legend>What are you doing?</legend>
-            <!-- List of activities -->
-            <input type="checkbox" id="commuting" name="activities" value="commuting">
-            <label for="commuting">Commuting</label><br>
-            <!-- Add all your activity options here in the same format -->
-            <!-- ... -->
-            <input type="checkbox" id="other" name="activities" value="other">
-            <label for="other">Other</label><br>
-        </fieldset>
-
-        <!-- Submit Button -->
         <button type="submit">Submit</button>
     </form>
 </div>
