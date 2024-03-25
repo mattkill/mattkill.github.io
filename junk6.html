@@ -4,13 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .survey-container {
+            width: 90%;
+            max-width: 400px;
+            font-size: 18px;
+        }
+
+        .question-text {
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block; /* Ensure each option is on its own line */
+            width: 100%; /* Make options full width */
+            padding: 10px;
+            margin-bottom: 10px; /* Space between options */
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .slider-container {
+            margin-bottom: 20px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .next-button {
+            display: none; /* Initially hidden, shown only for certain question types */
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<div id="surveyContainer"></div>
+<div id="surveyContainer" class="survey-container"></div>
 
 <script>
-// Example survey structure with a single multiple-choice question
 const survey = {
     "title": "Daily Happiness Survey",
     "questions": [
@@ -22,7 +80,16 @@ const survey = {
                 { "value": "Yes", "displayText": "Yes" },
                 { "value": "No", "displayText": "No" }
             ],
-            "expression": "true" // This question always shows for the demo
+            "expression": "true"
+        },
+        {
+            "questionId": "happinessLevel",
+            "questionText": "On a scale from 1 to 10, how happy are you today?",
+            "type": "slider",
+            "min": 1,
+            "max": 10,
+            "step": 1,
+            "expression": "true"
         }
     ]
 };
@@ -34,18 +101,17 @@ function renderQuestion(questionIndex) {
     const question = survey.questions[questionIndex];
     const container = document.getElementById('surveyContainer');
 
-    // Clear previous content
-    container.innerHTML = '';
+    container.innerHTML = ''; // Clear previous content
 
-    // Add question text
     const questionText = document.createElement('p');
+    questionText.className = 'question-text';
     questionText.textContent = question.questionText;
     container.appendChild(questionText);
 
-    // Add input element based on question type (simplified example for multiple choice)
     if (question.type === 'multipleChoice') {
         question.options.forEach(option => {
             const button = document.createElement('button');
+            button.className = 'option';
             button.textContent = option.displayText;
             button.onclick = () => {
                 answers[question.questionId] = option.value;
@@ -53,9 +119,29 @@ function renderQuestion(questionIndex) {
             };
             container.appendChild(button);
         });
-    } else {
-        // Handle other question types and add a Next button
-        // For simplicity, this part is omitted in the example
+    } else if (question.type === 'slider') {
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = 'slider-container';
+        
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = question.min;
+        slider.max = question.max;
+        slider.step = question.step;
+        slider.oninput = () => {
+            answers[question.questionId] = slider.value;
+        };
+        sliderContainer.appendChild(slider);
+
+        container.appendChild(sliderContainer);
+
+        // Show the Next button for the slider
+        const nextButton = document.createElement('button');
+        nextButton.className = 'next-button';
+        nextButton.textContent = 'Next';
+        nextButton.style.display = 'block';
+        nextButton.onclick = goToNextQuestion;
+        container.appendChild(nextButton);
     }
 }
 
@@ -70,13 +156,3 @@ function goToNextQuestion() {
 
 function endSurvey() {
     const container = document.getElementById('surveyContainer');
-    container.innerHTML = '<p>Thank you for completing the survey!</p>';
-    // Here, you might also handle sending the answers to a server or storage
-}
-
-// Start the survey
-renderQuestion(currentQuestionIndex);
-</script>
-
-</body>
-</html>
