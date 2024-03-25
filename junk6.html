@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Survey</title>
-    <style>
-        /* Add your CSS styles here */
-    </style>
 </head>
 <body>
 
 <div id="surveyContainer"></div>
 
 <script>
-// Example survey structure
+// Example survey structure with a single multiple-choice question
 const survey = {
     "title": "Daily Happiness Survey",
-    "questions": [/* Your survey questions here */]
+    "questions": [
+        {
+            "questionId": "activityEnjoyment",
+            "questionText": "Did you enjoy your last activity?",
+            "type": "multipleChoice",
+            "options": [
+                { "value": "Yes", "displayText": "Yes" },
+                { "value": "No", "displayText": "No" }
+            ],
+            "expression": "true" // This question always shows for the demo
+        }
+    ]
 };
 
 let currentQuestionIndex = 0;
