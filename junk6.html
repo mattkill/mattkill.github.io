@@ -119,14 +119,15 @@ let answers = {};
 function renderQuestion(questionIndex) {
     const question = survey.questions[questionIndex];
     const container = document.getElementById('surveyContainer');
-
     container.innerHTML = ''; // Clear previous content
 
+    // Display the question text
     const questionText = document.createElement('p');
     questionText.className = 'question-text';
     questionText.textContent = question.questionText;
     container.appendChild(questionText);
 
+    // Handle multiple-choice questions
     if (question.type === 'multipleChoice') {
         question.options.forEach(option => {
             const button = document.createElement('button');
@@ -134,22 +135,31 @@ function renderQuestion(questionIndex) {
             button.textContent = option.displayText;
             button.onclick = () => {
                 answers[question.questionId] = option.value;
-                goToNextQuestion
+                // Use setTimeout to ensure the state update completes before advancing
+                setTimeout(goToNextQuestion, 100);
             };
             container.appendChild(button);
         });
-    } else if (question.type === 'slider') {
+    }
+    // Handle slider questions
+    else if (question.type === 'slider') {
         const slider = document.createElement('input');
         slider.type = 'range';
         slider.className = 'slider';
         slider.min = question.min;
         slider.max = question.max;
         slider.step = question.step;
+        slider.value = question.min; // Initialize slider at min value
+
+        // Hide slider thumb initially
+        slider.style.visibility = 'hidden';
+
         slider.oninput = () => {
-            // Show the slider thumb when the user interacts with it
-            slider.style.setProperty('--thumb-visibility', 'visible');
+            // Show the slider thumb when the user starts interacting with it
+            slider.style.visibility = 'visible';
             answers[question.questionId] = slider.value;
         };
+
         const sliderContainer = document.createElement('div');
         sliderContainer.className = 'slider-container';
         sliderContainer.appendChild(slider);
@@ -158,12 +168,16 @@ function renderQuestion(questionIndex) {
         const nextButton = document.createElement('button');
         nextButton.className = 'next-button';
         nextButton.textContent = 'Next';
-        nextButton.onclick = () => {
-            goToNextQuestion();
-        };
+        nextButton.onclick = goToNextQuestion;
         container.appendChild(nextButton);
+
+        // Only show the "Next" button after the user has interacted with the slider
+        slider.onchange = () => {
+            nextButton.style.display = 'block';
+        };
     }
 }
+
 
 function goToNextQuestion() {
     currentQuestionIndex++;
