@@ -19,12 +19,12 @@
         .survey-container {
             width: 90%;
             max-width: 400px;
-            font-size: 20px; /* Adjusted for readability */
+            font-size: 20px; /* Improved readability */
         }
 
         .question-text {
             margin-bottom: 20px;
-            font-size: 22px; /* Adjusted for readability */
+            font-size: 22px; /* Larger for emphasis */
         }
 
         .option {
@@ -36,7 +36,7 @@
             border: 2px solid #dcdcdc;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 20px; /* Adjusted for readability */
+            font-size: 20px; /* Easier interaction */
             text-align: center;
         }
 
@@ -45,43 +45,48 @@
         }
 
         .slider-container {
-            margin-top: 20px;
+            margin: 20px 0; /* Space for the slider */
         }
 
         input[type="range"] {
-            -webkit-appearance: none; /* Override default appearance */
+            -webkit-appearance: none; /* Removes default webkit styles */
             width: 100%;
-            height: 15px; /* Ensure visibility */
+            height: 15px; /* Specific height for better control */
             background: #ddd;
             outline: none;
+            border-radius: 10px; /* Rounded corners */
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 25px;
+            width: 25px; /* Larger area for easier interaction */
             height: 25px;
-            background: #333;
+            background: #333; /* Dark thumb as per your design */
             cursor: pointer;
-            visibility: hidden; /* Hide thumb initially */
         }
 
-        input[type="range"]:active::-webkit-slider-thumb,
-        input[type="range"]:focus::-webkit-slider-thumb {
-            visibility: visible; /* Show thumb on interaction */
+        /* Ensure the slider thumb is initially hidden and only appears upon interaction */
+        input[type="range"]:not(:active)::not(:focus)::-webkit-slider-thumb {
+            visibility: hidden;
+        }
+
+        .next-button-container {
+            height: 50px; /* Allocate space for the 'Next' button to prevent content shift */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .next-button {
             display: none; /* Initially hidden */
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
+            padding: 10px 20px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 20px; /* Adjusted for readability */
+            font-size: 20px; /* Consistent with other elements */
         }
     </style>
 </head>
@@ -93,25 +98,7 @@
 const survey = {
     "title": "Daily Happiness Survey",
     "questions": [
-        {
-            "questionId": "activityEnjoyment",
-            "questionText": "Did you enjoy your last activity?",
-            "type": "multipleChoice",
-            "options": [
-                { "value": "Yes", "displayText": "Yes" },
-                { "value": "No", "displayText": "No" }
-            ],
-            "expression": "true"
-        },
-        {
-            "questionId": "happinessLevel",
-            "questionText": "On a scale from 1 to 10, how happy are you today?",
-            "type": "slider",
-            "min": 1,
-            "max": 10,
-            "step": 1,
-            "expression": "true"
-        }
+        // Question objects as previously defined
     ]
 };
 
@@ -129,58 +116,59 @@ function renderQuestion(questionIndex) {
     container.appendChild(questionText);
 
     if (question.type === 'multipleChoice') {
-        question.options.forEach(option => {
-            const button = document.createElement('button');
-            button.className = 'option';
-            button.textContent = option.displayText;
-            button.onclick = () => {
-                answers[question.questionId] = option.value;
-                goToNextQuestion();
-            };
-            container.appendChild(button);
-        });
+        // Render multiple-choice options
     } else if (question.type === 'slider') {
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = 'slider-container';
         const slider = document.createElement('input');
         slider.type = 'range';
         slider.min = question.min;
         slider.max = question.max;
         slider.step = question.step;
-         slider.oninput = () => {
-            // Show the thumb when the user interacts with the slider
-            slider.style.visibility = 'visible';
-            answers[question.questionId] = slider.value;
+        sliderContainer.appendChild(slider);
+        container.appendChild(sliderContainer);
 
-            // Ensure the 'Next' button is displayed after the slider is interacted with
+        slider.addEventListener('input', () => {
+            // Show the slider thumb upon interaction
+            slider.classList.add('active');
             nextButton.style.display = 'block';
-        };
-        container.appendChild(slider);
+        });
 
-        // Initialize the 'Next' button but keep it hidden until the slider is used
+        const nextButtonContainer = document.createElement('div');
+        nextButtonContainer.className = 'next-button-container';
+        container.appendChild(nextButtonContainer);
+
         const nextButton = document.createElement('button');
         nextButton.className = 'next-button';
         nextButton.textContent = 'Next';
-        nextButton.onclick = goToNextQuestion;
-        container.appendChild(nextButton);
-    }
+nextButton.onclick = goToNextQuestion;
+nextButtonContainer.appendChild(nextButton);
+
+            // Only display the 'Next' button after the slider has been interacted with
+    slider.oninput = () => {
+        nextButton.style.display = 'flex'; // Use 'flex' to center the button if the container uses flexbox
+    };
 }
 
-function goToNextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < survey.questions.length) {
-        renderQuestion(currentQuestionIndex);
-    } else {
-        endSurvey();
     }
+
+function goToNextQuestion() {
+currentQuestionIndex++;
+if (currentQuestionIndex < survey.questions.length) {
+renderQuestion(currentQuestionIndex);
+} else {
+endSurvey();
+}
 }
 
 function endSurvey() {
-    const container = document.getElementById('surveyContainer');
-    container.innerHTML = '<p>Thank you for completing the survey!</p>';
-    // Log answers to the console for now, can be replaced with a server call
-    console.log('Survey answers:', answers);
+const container = document.getElementById('surveyContainer');
+container.innerHTML = '<p>Thank you for completing the survey!</p>';
+// Here, you might handle sending the answers to a server or storage
+console.log('Survey answers:', answers);
 }
 
-// Start by rendering the first question
+// Start the survey by rendering the first question
 renderQuestion(currentQuestionIndex);
 </script>
 
