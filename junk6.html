@@ -19,24 +19,24 @@
         .survey-container {
             width: 90%;
             max-width: 400px;
-            font-size: 20px; /* Increased font size for better readability on smartphones */
+            font-size: 20px; /* Adjusted for readability */
         }
 
         .question-text {
             margin-bottom: 20px;
-            font-size: 22px; /* Slightly larger font size for questions */
+            font-size: 22px; /* Adjusted for readability */
         }
 
         .option {
             display: block;
             width: 100%;
-            padding: 15px; /* Increased padding for larger touch targets */
+            padding: 15px;
             margin-bottom: 10px;
             background-color: #f0f0f0;
-            border: 2px solid #dcdcdc; /* Slightly thicker border for clarity */
+            border: 2px solid #dcdcdc;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 20px; /* Increased font size for options */
+            font-size: 20px; /* Adjusted for readability */
             text-align: center;
         }
 
@@ -45,13 +45,13 @@
         }
 
         .slider-container {
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         input[type="range"] {
-            -webkit-appearance: none;
+            -webkit-appearance: none; /* Override default appearance */
             width: 100%;
-            height: 15px; /* Increased slider thickness for easier interaction */
+            height: 15px; /* Ensure visibility */
             background: #ddd;
             outline: none;
         }
@@ -59,27 +59,29 @@
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 25px; /* Larger slider thumb for easier interaction */
+            width: 25px;
             height: 25px;
             background: #333;
             cursor: pointer;
             visibility: hidden; /* Hide thumb initially */
         }
 
-        input[type="range"]:active::-webkit-slider-thumb {
-            visibility: visible; /* Show thumb when active */
+        input[type="range"]:active::-webkit-slider-thumb,
+        input[type="range"]:focus::-webkit-slider-thumb {
+            visibility: visible; /* Show thumb on interaction */
         }
 
         .next-button {
+            display: none; /* Initially hidden */
             width: 100%;
-            padding: 15px; /* Increased padding for a larger button */
+            padding: 15px;
             margin-top: 20px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 20px; /* Increased font size for the button */
+            font-size: 20px; /* Adjusted for readability */
         }
     </style>
 </head>
@@ -99,7 +101,7 @@ const survey = {
                 { "value": "Yes", "displayText": "Yes" },
                 { "value": "No", "displayText": "No" }
             ],
-            "expression": "true" // Conditional logic parameter, for future use
+            "expression": "true"
         },
         {
             "questionId": "happinessLevel",
@@ -108,7 +110,7 @@ const survey = {
             "min": 1,
             "max": 10,
             "step": 1,
-            "expression": "true" // Conditional logic parameter, for future use
+            "expression": "true"
         }
     ]
 };
@@ -119,7 +121,7 @@ let answers = {};
 function renderQuestion(questionIndex) {
     const question = survey.questions[questionIndex];
     const container = document.getElementById('surveyContainer');
-    container.innerHTML = ''; // Clear previous content
+    container.innerHTML = '';
 
     const questionText = document.createElement('p');
     questionText.className = 'question-text';
@@ -133,45 +135,34 @@ function renderQuestion(questionIndex) {
             button.textContent = option.displayText;
             button.onclick = () => {
                 answers[question.questionId] = option.value;
-                // Use setTimeout to ensure the click event fully processes
-                setTimeout(goToNextQuestion, 100);
+                goToNextQuestion();
             };
             container.appendChild(button);
         });
     } else if (question.type === 'slider') {
-        const sliderContainer = document.createElement('div');
-        sliderContainer.className = 'slider-container';
-        container.appendChild(sliderContainer);
-
         const slider = document.createElement('input');
         slider.type = 'range';
-        slider.className = 'slider';
         slider.min = question.min;
         slider.max = question.max;
         slider.step = question.step;
-        sliderContainer.appendChild(slider);
-
-        // Initially hide the slider thumb
-        slider.style.visibility = 'hidden';
-
-        // Show the slider thumb when the user starts interacting
-        slider.addEventListener('input', () => {
+         slider.oninput = () => {
+            // Show the thumb when the user interacts with the slider
             slider.style.visibility = 'visible';
             answers[question.questionId] = slider.value;
-        });
 
+            // Ensure the 'Next' button is displayed after the slider is interacted with
+            nextButton.style.display = 'block';
+        };
+        container.appendChild(slider);
+
+        // Initialize the 'Next' button but keep it hidden until the slider is used
         const nextButton = document.createElement('button');
         nextButton.className = 'next-button';
         nextButton.textContent = 'Next';
-        nextButton.onclick = () => {
-            if (slider.style.visibility === 'visible') { // Ensure there was interaction
-                goToNextQuestion();
-            }
-        };
+        nextButton.onclick = goToNextQuestion;
         container.appendChild(nextButton);
     }
 }
-
 
 function goToNextQuestion() {
     currentQuestionIndex++;
@@ -185,11 +176,11 @@ function goToNextQuestion() {
 function endSurvey() {
     const container = document.getElementById('surveyContainer');
     container.innerHTML = '<p>Thank you for completing the survey!</p>';
+    // Log answers to the console for now, can be replaced with a server call
     console.log('Survey answers:', answers);
-    // Here, you might handle sending the answers to a server or storage
 }
 
-// Start the survey by rendering the first question
+// Start by rendering the first question
 renderQuestion(currentQuestionIndex);
 </script>
 
