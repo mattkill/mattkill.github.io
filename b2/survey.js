@@ -13,13 +13,44 @@ const survey = {
             endpoints: ["Very bad", "Very good"] // Slider endpoint labels
         },
         {
-            questionId: "activities",
+            questionId: "activities_basic",
             questionText: "What are you doing right now?",
             type: "checkbox",
             options: [
                 { value: "work", displayText: "Work" },
                 { value: "leisure", displayText: "Leisure" },
                 { value: "personalcare", displayText: "Personal Care" },
+                { value: "travel", displayText: "Travelling" },
+                {value: "other", displayText: "Other" }
+                // Add more options as needed
+            ],
+            expression: "true" // Placeholder for any conditional logic
+        },
+        {
+            questionId: "activities",
+            questionText: "What are you doing right now? (check all that apply)",
+            type: "checkbox",
+            options: [
+                { value: "work", displayText: "Working" },
+                { value: "talking", displayText: "Talking in person" },
+                { value: "shopping", displayText: "Shopping" },
+                { value: "errands", displayText: "Errands" },
+                { value: "tv", displayText: "Watching TV / Television" },
+                { value: "youtube", displayText: "Watching Youtube" },
+                { value: "exercising", displayText: "Exercising" },
+                { value: "commuting", displayText: "Commuting" },
+                { value: "noncommute_travel", displayText: "Travel (besides commuting)" },
+                { value: "walking", displayText: "Walking" },
+                { value: "preparingfood", displayText: "Preparing Food" },
+                { value: "eatingmeal", displayText: "Eating a meal" },
+                { value: "eatingnonmeal", displayText: "Eating a meal (not a meal)" },
+                { value: "yourchildren", displayText: "Taking care of your children" },
+                { value: "otherchildren", displayText: "Taking care of children that aren't yours" },
+                { value: "videocall", displayText: "Video call/chat (Zoom, Facetime, Teams, etc)" },
+                { value: "messaging", displayText: "Messaging (WhatsApp, Messenger, iMessage, SMS, etc)" },
+                { value: "playing", displayText: "Playing" },
+                { value: "housework", displayText: "Housework" },
+                { value: "attendingclass", displayText: "Attending a class" },
                 {value: "other", displayText: "Other" }
                 // Add more options as needed
             ],
